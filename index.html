@@ -1,0 +1,1332 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FarmGuard – AI-powered crop pest detection for farmers. Upload a photo and identify pests instantly." />
+  <meta name="keywords" content="pest detection, crop health, agriculture, farming, AI, plant disease" />
+  <title>FarmGuard – Protect Your Crops, Protect Your Future</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS VARIABLES ─────────────────────────────────────── */
+    :root {
+      --green-deep:   #1a3c2e;
+      --green-mid:    #2d6a4f;
+      --green-fresh:  #52b788;
+      --green-light:  #b7e4c7;
+      --amber:        #e9a800;
+      --amber-light:  #fde68a;
+      --soil:         #7c4a1e;
+      --cream:        #faf6ed;
+      --white:        #ffffff;
+      --text-dark:    #1a2e1e;
+      --text-mid:     #3d5a47;
+      --text-soft:    #6b8f75;
+      --shadow-sm:    0 2px 12px rgba(26,60,46,.08);
+      --shadow-md:    0 8px 32px rgba(26,60,46,.14);
+      --shadow-lg:    0 20px 60px rgba(26,60,46,.18);
+      --radius-sm:    8px;
+      --radius-md:    16px;
+      --radius-lg:    28px;
+      --radius-pill:  999px;
+      --transition:   .32s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ─── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    /* ─── UTILITY ────────────────────────────────────────────── */
+    .container { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .section-tag {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green-mid);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 14px;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 900;
+      line-height: 1.18;
+      color: var(--green-deep);
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-top: 12px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-mid);
+      color: var(--white);
+      font-size: .95rem;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: var(--radius-pill);
+      transition: var(--transition);
+      box-shadow: 0 4px 18px rgba(45,106,79,.3);
+    }
+    .btn-primary:hover { background: var(--green-deep); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,106,79,.38); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--green-mid);
+      font-size: .95rem;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--green-mid);
+      transition: var(--transition);
+    }
+    .btn-secondary:hover { background: var(--green-mid); color: #fff; }
+
+    /* Scroll-reveal */
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── NAVBAR ─────────────────────────────────────────────── */
+    #navbar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      padding: 18px 0;
+      transition: var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(250,246,237,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 12px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem; font-weight: 900;
+      color: var(--green-deep);
+    }
+    .nav-logo .logo-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--green-mid);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo .logo-icon svg { width: 22px; height: 22px; }
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+    }
+    .nav-links a {
+      font-size: .9rem; font-weight: 500; color: var(--text-mid);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 2px; background: var(--green-fresh);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover { color: var(--green-deep); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { padding: 10px 22px; font-size: .88rem; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; padding: 5px; z-index: 1100;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--green-deep); border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; z-index: 1050;
+      background: var(--cream); padding: 100px 32px 40px;
+      flex-direction: column; gap: 28px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 1.6rem; font-family: 'Playfair Display', serif;
+      font-weight: 700; color: var(--green-deep);
+      border-bottom: 1px solid var(--green-light); padding-bottom: 14px;
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(82,183,136,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(183,228,199,.25) 0%, transparent 60%),
+        var(--cream);
+      display: flex; align-items: center;
+      padding: 120px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 64px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(82,183,136,.15); border: 1px solid rgba(82,183,136,.35);
+      color: var(--green-mid); font-size: .8rem; font-weight: 600;
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      margin-bottom: 22px; letter-spacing: .06em;
+    }
+    .hero-badge .dot { width: 7px; height: 7px; background: var(--green-fresh); border-radius: 50%; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.5);opacity:.6} }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900; line-height: 1.12;
+      color: var(--green-deep);
+      margin-bottom: 18px;
+    }
+    .hero-title em { font-style: normal; color: var(--green-fresh); }
+    .hero-desc {
+      font-size: 1.1rem; color: var(--text-soft); line-height: 1.75;
+      margin-bottom: 34px; max-width: 480px;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 44px; padding-top: 36px;
+      border-top: 1px solid rgba(45,106,79,.12);
+    }
+    .stat-item .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem; font-weight: 900; color: var(--green-deep);
+    }
+    .stat-item .stat-label { font-size: .8rem; color: var(--text-soft); margin-top: 2px; }
+
+    /* Hero visual */
+    .hero-visual { position: relative; }
+    .hero-phone {
+      width: 280px; margin: 0 auto;
+      background: var(--green-deep);
+      border-radius: 36px;
+      padding: 14px 14px 22px;
+      box-shadow: var(--shadow-lg);
+      position: relative; z-index: 2;
+    }
+    .phone-screen {
+      background: #f0faf4; border-radius: 24px; overflow: hidden;
+      aspect-ratio: 9/16;
+      display: flex; flex-direction: column;
+    }
+    .phone-topbar {
+      background: var(--green-mid); color: #fff;
+      padding: 12px 16px;
+      font-size: .75rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .phone-scan-area {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px; padding: 20px;
+      background: linear-gradient(160deg, #e8f5ed 0%, #d4eddf 100%);
+    }
+    .scan-frame {
+      width: 130px; height: 130px;
+      border: 3px solid var(--green-fresh);
+      border-radius: 16px;
+      position: relative;
+      animation: scanAnim 2s infinite alternate;
+    }
+    @keyframes scanAnim { from{box-shadow:0 0 0 0 rgba(82,183,136,.4)} to{box-shadow:0 0 0 12px rgba(82,183,136,0)} }
+    .scan-frame::before, .scan-frame::after {
+      content: ''; position: absolute;
+      width: 16px; height: 16px;
+      border-color: var(--amber); border-style: solid;
+    }
+    .scan-frame::before { top: -3px; left: -3px; border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
+    .scan-frame::after  { bottom: -3px; right: -3px; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
+    .scan-leaf { font-size: 3rem; }
+    .phone-result {
+      background: #fff; padding: 12px 14px;
+      font-size: .72rem;
+    }
+    .result-label { color: var(--text-soft); margin-bottom: 4px; }
+    .result-pest {
+      font-weight: 700; color: #d44c2a; font-size: .82rem;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .confidence-bar {
+      height: 5px; background: #e8ede9; border-radius: 3px; margin-top: 7px; overflow: hidden;
+    }
+    .confidence-fill {
+      height: 100%; background: var(--green-fresh); border-radius: 3px;
+      width: 88%; animation: fillBar 2s ease forwards;
+    }
+    @keyframes fillBar { from{width:0} to{width:88%} }
+    .phone-btn-row {
+      padding: 10px 14px;
+      display: flex; gap: 8px;
+    }
+    .phone-btn {
+      flex: 1; padding: 8px; border-radius: 10px;
+      font-size: .7rem; font-weight: 600; text-align: center;
+    }
+    .phone-btn.primary { background: var(--green-mid); color: #fff; }
+    .phone-btn.secondary { background: var(--green-light); color: var(--green-deep); }
+
+    /* Floating cards */
+    .float-card {
+      position: absolute;
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      box-shadow: var(--shadow-md);
+      display: flex; align-items: center; gap: 10px;
+      font-size: .8rem; font-weight: 600; color: var(--green-deep);
+      z-index: 3;
+      animation: floatCard 4s ease-in-out infinite alternate;
+    }
+    @keyframes floatCard { from{transform:translateY(0)} to{transform:translateY(-8px)} }
+    .float-card:nth-child(2) { animation-delay: .8s; }
+    .float-card .card-icon { font-size: 1.4rem; }
+    .float-card-1 { top: 14%; left: -18%; }
+    .float-card-2 { bottom: 18%; right: -16%; animation-duration: 5s; }
+    .hero-blob {
+      position: absolute; width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(82,183,136,.13) 0%, transparent 70%);
+      border-radius: 50%; right: -80px; top: 50%; transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────────── */
+    #about {
+      padding: 100px 0;
+      background: var(--green-deep);
+      color: #fff;
+      position: relative; overflow: hidden;
+    }
+    #about::before {
+      content: ''; position: absolute; top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(82,183,136,.12) 0%, transparent 70%);
+    }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+    .about-tag { background: rgba(82,183,136,.2); color: var(--green-light); }
+    .about-heading { color: #fff; }
+    .about-sub { color: rgba(255,255,255,.65); }
+    .about-points { margin-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+    .about-point {
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .about-point .icon-circle {
+      flex-shrink: 0; width: 38px; height: 38px;
+      background: rgba(82,183,136,.2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .about-point p { color: rgba(255,255,255,.72); font-size: .95rem; line-height: 1.6; }
+    .about-point strong { color: #fff; display: block; margin-bottom: 2px; }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-img-wrap {
+      background: rgba(82,183,136,.12);
+      border: 1px solid rgba(82,183,136,.25);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+    }
+    .about-big-icon { font-size: 7rem; filter: drop-shadow(0 8px 24px rgba(82,183,136,.3)); }
+    .about-pills {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px;
+    }
+    .about-pill {
+      background: rgba(82,183,136,.18); border: 1px solid rgba(82,183,136,.3);
+      color: var(--green-light); font-size: .78rem; font-weight: 500;
+      padding: 6px 14px; border-radius: var(--radius-pill);
+    }
+
+    /* ─── FEATURES ───────────────────────────────────────────── */
+    #features { padding: 100px 0; background: var(--cream); }
+    .features-header { text-align: center; margin-bottom: 56px; }
+    .features-header .section-sub { margin: 12px auto 0; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 36px 28px;
+      border: 1.5px solid rgba(45,106,79,.08);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--green-fresh), var(--green-mid));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--transition);
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon {
+      width: 56px; height: 56px;
+      background: var(--green-light);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 20px;
+      transition: var(--transition);
+    }
+    .feature-card:hover .feature-icon { background: var(--green-mid); }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--green-deep); margin-bottom: 10px; }
+    .feature-card p { font-size: .92rem; color: var(--text-soft); line-height: 1.7; }
+
+    /* ─── HOW IT WORKS ───────────────────────────────────────── */
+    #how-it-works { padding: 100px 0; background: #f2f8f4; }
+    .how-header { text-align: center; margin-bottom: 64px; }
+    .how-header .section-sub { margin: 12px auto 0; }
+    .steps-wrap {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+      position: relative;
+    }
+    .steps-wrap::before {
+      content: ''; position: absolute;
+      top: 44px; left: 12.5%; right: 12.5%; height: 2px;
+      background: linear-gradient(90deg, var(--green-light), var(--green-fresh), var(--green-light));
+      z-index: 0;
+    }
+    .step-item { text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+    .step-num {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: var(--green-deep); color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 6px 24px rgba(26,60,46,.22);
+      transition: var(--transition);
+    }
+    .step-item:hover .step-num { background: var(--green-fresh); transform: scale(1.08); }
+    .step-emoji { font-size: 2.2rem; margin-bottom: 8px; }
+    .step-item h3 { font-size: 1rem; font-weight: 700; color: var(--green-deep); margin-bottom: 8px; }
+    .step-item p { font-size: .88rem; color: var(--text-soft); line-height: 1.65; }
+
+    /* ─── GALLERY ────────────────────────────────────────────── */
+    #gallery { padding: 100px 0; background: var(--cream); }
+    .gallery-header { text-align: center; margin-bottom: 48px; }
+    .gallery-header .section-sub { margin: 12px auto 0; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    .gallery-item {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .gallery-item:first-child { grid-row: 1 / 3; }
+    .gallery-inner {
+      width: 100%; aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+      transition: transform var(--transition);
+    }
+    .gallery-item:first-child .gallery-inner { aspect-ratio: 4/5; }
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: rgba(26,60,46,0);
+      display: flex; align-items: flex-end; padding: 16px;
+      transition: background var(--transition);
+    }
+    .gallery-overlay span {
+      color: #fff; font-size: .82rem; font-weight: 600;
+      opacity: 0; transform: translateY(8px);
+      transition: all var(--transition);
+    }
+    .gallery-item:hover .gallery-inner { transform: scale(1.05); }
+    .gallery-item:hover .gallery-overlay { background: rgba(26,60,46,.5); }
+    .gallery-item:hover .gallery-overlay span { opacity: 1; transform: none; }
+    .g1 { background: linear-gradient(135deg,#d4eddf,#a8d5b5); }
+    .g2 { background: linear-gradient(135deg,#fef3c7,#fde68a); }
+    .g3 { background: linear-gradient(135deg,#fce4d6,#f9c5b3); }
+    .g4 { background: linear-gradient(135deg,#dbeafe,#bfdbfe); }
+    .g5 { background: linear-gradient(135deg,#e0e7ff,#c7d2fe); }
+
+    /* ─── TESTIMONIALS ───────────────────────────────────────── */
+    #testimonials { padding: 100px 0; background: var(--green-deep); }
+    .testimonials-header { text-align: center; margin-bottom: 56px; }
+    .testimonials-header .section-tag { background: rgba(82,183,136,.2); color: var(--green-light); }
+    .testimonials-header .section-heading { color: #fff; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testi-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      transition: var(--transition);
+    }
+    .testi-card:hover { background: rgba(255,255,255,.1); transform: translateY(-4px); }
+    .stars { color: var(--amber); font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 14px; }
+    .testi-card blockquote {
+      font-size: .95rem; color: rgba(255,255,255,.75);
+      line-height: 1.75; font-style: italic; margin-bottom: 20px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      background: rgba(82,183,136,.2);
+      border: 2px solid rgba(82,183,136,.3);
+    }
+    .author-name { font-size: .9rem; font-weight: 700; color: #fff; }
+    .author-role { font-size: .78rem; color: rgba(255,255,255,.5); }
+
+    /* ─── FAQ ────────────────────────────────────────────────── */
+    #faq { padding: 100px 0; background: #f2f8f4; }
+    .faq-wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start; }
+    .faq-left .section-sub { max-width: none; }
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      background: #fff; border-radius: var(--radius-md);
+      border: 1.5px solid rgba(45,106,79,.08);
+      overflow: hidden; transition: var(--transition);
+    }
+    .faq-item.open { border-color: var(--green-fresh); }
+    .faq-question {
+      width: 100%; padding: 20px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .95rem; font-weight: 600; color: var(--green-deep);
+      cursor: pointer; gap: 16px; text-align: left;
+    }
+    .faq-icon {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--green-light); color: var(--green-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+      transition: transform var(--transition), background var(--transition);
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--green-mid); color: #fff; }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height .4s ease, padding .4s ease;
+      font-size: .9rem; color: var(--text-soft); line-height: 1.7;
+      padding: 0 24px;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding: 0 24px 20px; }
+
+    /* ─── CONTACT ────────────────────────────────────────────── */
+    #contact { padding: 100px 0; background: var(--cream); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; align-items: start; }
+    .contact-info .section-sub { max-width: none; margin-bottom: 32px; }
+    .contact-details { display: flex; flex-direction: column; gap: 18px; }
+    .contact-row {
+      display: flex; align-items: center; gap: 14px;
+      font-size: .9rem; color: var(--text-mid);
+    }
+    .contact-row .ci {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--green-light); display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-form {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      box-shadow: var(--shadow-md);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group label {
+      display: block; font-size: .82rem; font-weight: 600;
+      color: var(--green-deep); margin-bottom: 7px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 13px 16px;
+      border: 1.5px solid rgba(45,106,79,.15);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif; font-size: .92rem;
+      color: var(--text-dark); background: #f9fdf9;
+      transition: border-color var(--transition);
+      outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--green-fresh);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(82,183,136,.12);
+    }
+    .form-group input.error, .form-group textarea.error {
+      border-color: #e55;
+    }
+    .form-error-msg { font-size: .78rem; color: #c44; margin-top: 4px; display: none; }
+    .form-error-msg.show { display: block; }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit { width: 100%; padding: 14px; font-size: 1rem; font-weight: 600; }
+    .form-success {
+      display: none; text-align: center; padding: 24px;
+      color: var(--green-mid); font-weight: 600; font-size: 1rem;
+    }
+    .form-success.show { display: block; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    #footer {
+      background: var(--green-deep); color: rgba(255,255,255,.7);
+      padding: 72px 0 32px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; gap: 40px;
+      margin-bottom: 52px;
+    }
+    .footer-brand .nav-logo { color: #fff; margin-bottom: 14px; }
+    .footer-brand p { font-size: .88rem; line-height: 1.7; max-width: 260px; }
+    .social-links { display: flex; gap: 12px; margin-top: 22px; }
+    .social-link {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; transition: var(--transition);
+    }
+    .social-link:hover { background: var(--green-mid); border-color: transparent; color: #fff; }
+    .footer-col h4 { color: #fff; font-size: .92rem; font-weight: 700; margin-bottom: 18px; }
+    .footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a {
+      font-size: .85rem; color: rgba(255,255,255,.55);
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--green-light); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .82rem; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom a { color: var(--green-light); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid    { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+      .hero-desc    { margin: 0 auto 34px; }
+      .hero-actions { justify-content: center; }
+      .hero-stats   { justify-content: center; }
+      .hero-visual  { display: none; }
+      .about-grid   { grid-template-columns: 1fr; gap: 48px; }
+      .features-grid{ grid-template-columns: 1fr 1fr; }
+      .steps-wrap   { grid-template-columns: 1fr 1fr; }
+      .steps-wrap::before { display: none; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-row: auto; }
+      .testi-grid   { grid-template-columns: 1fr; }
+      .faq-wrap     { grid-template-columns: 1fr; gap: 36px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .footer-grid  { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-wrap   { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .form-row     { grid-template-columns: 1fr; }
+      .footer-grid  { grid-template-columns: 1fr; }
+      #hero { padding: 100px 0 60px; }
+      #about, #features, #how-it-works, #gallery, #testimonials, #faq, #contact { padding: 72px 0; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-stats { flex-direction: column; gap: 16px; }
+      .contact-form { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ────────────────────────────────────── NAVBAR -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="FarmGuard home">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+        </div>
+        FarmGuard
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn-primary nav-cta">Get Started</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+  <a href="#about"       onclick="closeMenu()">About</a>
+  <a href="#features"    onclick="closeMenu()">Features</a>
+  <a href="#how-it-works"onclick="closeMenu()">How It Works</a>
+  <a href="#testimonials"onclick="closeMenu()">Reviews</a>
+  <a href="#faq"         onclick="closeMenu()">FAQ</a>
+  <a href="#contact"     onclick="closeMenu()">Contact</a>
+</nav>
+
+<!-- ────────────────────────────────────── HERO -->
+<section id="hero" aria-label="Hero section">
+  <div class="container">
+    <div class="hero-grid">
+      <!-- Left: copy -->
+      <div>
+        <div class="hero-badge">
+          <span class="dot"></span>
+          AI-Powered Pest Detection
+        </div>
+        <h1 class="hero-title">
+          Detect Pests <em>Early.</em><br>
+          Protect More.
+        </h1>
+        <p class="hero-desc">
+          Upload a photo of your crop, and FarmGuard's AI instantly identifies pests, suggests treatment, and helps you save your harvest before damage spreads.
+        </p>
+        <div class="hero-actions">
+          <a href="#how-it-works" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Scan Your Crop
+          </a>
+          <a href="#about" class="btn-secondary">Learn More</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">200+</div>
+            <div class="stat-label">Pests Detected</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">94%</div>
+            <div class="stat-label">Accuracy Rate</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">50K+</div>
+            <div class="stat-label">Farmers Helped</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: phone mockup -->
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-blob"></div>
+        <!-- Floating card 1 -->
+        <div class="float-card float-card-1">
+          <span class="card-icon">✅</span>
+          <div>
+            <div style="font-size:.68rem;color:var(--text-soft)">Detection complete</div>
+            <div>Aphids identified</div>
+          </div>
+        </div>
+        <!-- Phone -->
+        <div class="hero-phone">
+          <div class="phone-screen">
+            <div class="phone-topbar">
+              <span>📱 FarmGuard</span>
+              <span>●●●</span>
+            </div>
+            <div class="phone-scan-area">
+              <div class="scan-frame">
+                <span class="scan-leaf">🌿</span>
+              </div>
+              <p style="font-size:.7rem;color:var(--text-mid);text-align:center;">Point camera at affected leaf</p>
+            </div>
+            <div class="phone-result">
+              <div class="result-label">Detection Result:</div>
+              <div class="result-pest">⚠️ Aphid Infestation</div>
+              <div class="confidence-bar"><div class="confidence-fill"></div></div>
+              <div style="font-size:.65rem;color:var(--text-soft);margin-top:4px;">88% confidence</div>
+            </div>
+            <div class="phone-btn-row">
+              <div class="phone-btn primary">View Solution</div>
+              <div class="phone-btn secondary">Re-Scan</div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating card 2 -->
+        <div class="float-card float-card-2">
+          <span class="card-icon">🌾</span>
+          <div>
+            <div style="font-size:.68rem;color:var(--text-soft)">Crop health</div>
+            <div>Improving +12%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── ABOUT -->
+<section id="about" aria-labelledby="about-heading">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <span class="section-tag about-tag">About FarmGuard</span>
+        <h2 id="about-heading" class="section-heading about-heading">
+          Built for Farmers.<br>Powered by AI.
+        </h2>
+        <p class="section-sub about-sub">
+          FarmGuard is an intelligent crop health platform designed to give every farmer—regardless of farm size or tech experience—the power to detect pest threats instantly.
+        </p>
+        <div class="about-points">
+          <div class="about-point">
+            <div class="icon-circle">🔍</div>
+            <div>
+              <strong>Early Pest Detection</strong>
+              <p>Identify infestations before they cause crop loss—saving time, money, and yield.</p>
+            </div>
+          </div>
+          <div class="about-point">
+            <div class="icon-circle">💡</div>
+            <div>
+              <strong>Actionable Recommendations</strong>
+              <p>Get practical, region-specific advice on organic and chemical treatment options.</p>
+            </div>
+          </div>
+          <div class="about-point">
+            <div class="icon-circle">📲</div>
+            <div>
+              <strong>Works on Any Phone</strong>
+              <p>Designed for low-bandwidth environments and simple devices—no tech expertise required.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual reveal">
+        <div class="about-img-wrap">
+          <div class="about-big-icon">🌱</div>
+          <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-top:12px;">
+            Over 200 pest species identified across 30+ crops including rice, wheat, cotton, and vegetables.
+          </p>
+          <div class="about-pills">
+            <span class="about-pill">🌾 Wheat</span>
+            <span class="about-pill">🌽 Corn</span>
+            <span class="about-pill">🍅 Tomatoes</span>
+            <span class="about-pill">🌿 Cotton</span>
+            <span class="about-pill">🍚 Rice</span>
+            <span class="about-pill">🥦 Vegetables</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── FEATURES -->
+<section id="features" aria-labelledby="features-heading">
+  <div class="container">
+    <div class="features-header reveal">
+      <span class="section-tag">Features</span>
+      <h2 id="features-heading" class="section-heading">Everything a Farmer Needs</h2>
+      <p class="section-sub">Simple, powerful tools to keep your crops healthy all season long.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">📸</div>
+        <h3>Instant Photo Scan</h3>
+        <p>Snap a photo of any crop leaf, stem, or soil and receive a pest diagnosis in seconds—no internet delays.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🤖</div>
+        <h3>AI-Powered Analysis</h3>
+        <p>Our deep-learning model trained on millions of crop images detects 200+ pest species with up to 94% accuracy.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">💊</div>
+        <h3>Treatment Suggestions</h3>
+        <p>Receive step-by-step remedy plans—including organic, chemical, and preventive options tailored to your region.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📅</div>
+        <h3>Health History Log</h3>
+        <p>Track every scan and monitor your crop health over time. Spot recurring issues before they escalate.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🌐</div>
+        <h3>Works Offline</h3>
+        <p>Core detection features work without internet. Perfect for remote farms with limited connectivity.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔔</div>
+        <h3>Seasonal Alerts</h3>
+        <p>Get timely pest outbreak warnings based on your location, season, and the crops you're growing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── HOW IT WORKS -->
+<section id="how-it-works" aria-labelledby="how-heading">
+  <div class="container">
+    <div class="how-header reveal">
+      <span class="section-tag">Process</span>
+      <h2 id="how-heading" class="section-heading">How FarmGuard Works</h2>
+      <p class="section-sub">From photo to solution in under 10 seconds—it's that simple.</p>
+    </div>
+    <div class="steps-wrap">
+      <div class="step-item reveal">
+        <div class="step-num">1</div>
+        <div class="step-emoji">📷</div>
+        <h3>Capture a Photo</h3>
+        <p>Take a clear photo of the affected crop area—leaves, stems, fruits, or roots. Our app guides you for best results.</p>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">2</div>
+        <div class="step-emoji">⚡</div>
+        <h3>AI Analyzes Instantly</h3>
+        <p>FarmGuard's AI engine scans your image against 200+ known pest patterns and crop disease signatures.</p>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">3</div>
+        <div class="step-emoji">📋</div>
+        <h3>Get Your Diagnosis</h3>
+        <p>Receive a clear report: pest name, severity level, affected crop area, and confidence score—in plain language.</p>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">4</div>
+        <div class="step-emoji">🌾</div>
+        <h3>Apply the Solution</h3>
+        <p>Follow personalized treatment steps, dosages, and application timing. Save your crop and prevent future outbreaks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── GALLERY -->
+<section id="gallery" aria-labelledby="gallery-heading">
+  <div class="container">
+    <div class="gallery-header reveal">
+      <span class="section-tag">Gallery</span>
+      <h2 id="gallery-heading" class="section-heading">FarmGuard in Action</h2>
+      <p class="section-sub">See how farmers are using FarmGuard to protect crops across India and beyond.</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <div class="gallery-inner g1">🌿</div>
+        <div class="gallery-overlay"><span>Leaf scan – Aphid detection on wheat</span></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-inner g2">🌽</div>
+        <div class="gallery-overlay"><span>Maize stalk borer identified</span></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-inner g3">🍅</div>
+        <div class="gallery-overlay"><span>Tomato whitefly early warning</span></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-inner g4">🌾</div>
+        <div class="gallery-overlay"><span>Rice blast fungus scan result</span></div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-inner g5">🥬</div>
+        <div class="gallery-overlay"><span>Vegetable aphid treatment applied</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── TESTIMONIALS -->
+<section id="testimonials" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <div class="testimonials-header reveal">
+      <span class="section-tag">Testimonials</span>
+      <h2 id="testimonials-heading" class="section-heading">Farmers Love FarmGuard</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I used to lose 20–30% of my wheat every season to pests I couldn't even name. FarmGuard diagnosed the problem in seconds. Saved my crop and saved money."</blockquote>
+        <div class="testi-author">
+          <div class="author-avatar">👨‍🌾</div>
+          <div>
+            <div class="author-name">Ramesh Patel</div>
+            <div class="author-role">Wheat Farmer, Gujarat</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The offline mode is a game-changer for us. Our village has poor connectivity, but I could still scan my tomatoes and get the treatment guide instantly."</blockquote>
+        <div class="testi-author">
+          <div class="author-avatar">👩‍🌾</div>
+          <div>
+            <div class="author-name">Lakshmi Devi</div>
+            <div class="author-role">Tomato Grower, Andhra Pradesh</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★☆</div>
+        <blockquote>"As an agricultural extension officer, I recommend FarmGuard to all the farmers I work with. It gives them confidence to act early instead of waiting until it's too late."</blockquote>
+        <div class="testi-author">
+          <div class="author-avatar">🧑‍💼</div>
+          <div>
+            <div class="author-name">Dr. Suresh Kumar</div>
+            <div class="author-role">Agri Extension Officer, Punjab</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── FAQ -->
+<section id="faq" aria-labelledby="faq-heading">
+  <div class="container">
+    <div class="faq-wrap">
+      <div class="reveal">
+        <span class="section-tag">FAQ</span>
+        <h2 id="faq-heading" class="section-heading">Common Questions</h2>
+        <p class="section-sub">Everything you need to know before getting started with FarmGuard.</p>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Do I need internet to use FarmGuard?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">FarmGuard's core pest detection works offline using an on-device AI model. You only need internet for cloud-based features like updating pest databases and syncing crop history.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Which crops does FarmGuard support?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">FarmGuard currently supports 30+ crop types including rice, wheat, cotton, maize, tomatoes, potatoes, soybeans, and most common vegetables. We expand our database regularly.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How accurate is the pest detection?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Our AI model achieves up to 94% accuracy under normal conditions. Image clarity and lighting affect accuracy. We recommend taking multiple photos from different angles for best results.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Is FarmGuard free to use?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">FarmGuard offers a free tier with up to 10 scans per month. For unlimited scans, history logs, seasonal alerts, and agronomy consultations, affordable premium plans are available.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I use FarmGuard on any phone?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Yes! FarmGuard works on any Android smartphone running Android 7.0 or later. An iOS version is coming soon. The app is designed to run smoothly even on entry-level devices.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Are treatment recommendations safe for my crops?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">All recommendations are developed and reviewed by certified agronomists. We always provide both organic and chemical options and clearly label any safety precautions you should take.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── CONTACT -->
+<section id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <span class="section-tag">Contact Us</span>
+        <h2 id="contact-heading" class="section-heading">We're Here to Help</h2>
+        <p class="section-sub">
+          Have questions, need support, or want to partner with FarmGuard? Reach out—we respond within 24 hours.
+        </p>
+        <div class="contact-details">
+          <div class="contact-row">
+            <span class="ci">📧</span>
+            <span>support@farmguard.io</span>
+          </div>
+          <div class="contact-row">
+            <span class="ci">📞</span>
+            <span>1800-FARMGUARD (toll-free)</span>
+          </div>
+          <div class="contact-row">
+            <span class="ci">📍</span>
+            <span>Bengaluru, Karnataka, India</span>
+          </div>
+          <div class="contact-row">
+            <span class="ci">🕐</span>
+            <span>Mon – Sat: 8 AM – 7 PM IST</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form reveal" role="form" aria-label="Contact form">
+        <div class="form-success" id="formSuccess">
+          🎉 Thank you! We'll get back to you within 24 hours.
+        </div>
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">First Name *</label>
+              <input type="text" id="fname" name="fname" placeholder="Ramesh" autocomplete="given-name" />
+              <div class="form-error-msg" id="fnameErr">Please enter your first name.</div>
+            </div>
+            <div class="form-group">
+              <label for="lname">Last Name *</label>
+              <input type="text" id="lname" name="lname" placeholder="Patel" autocomplete="family-name" />
+              <div class="form-error-msg" id="lnameErr">Please enter your last name.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+            <div class="form-error-msg" id="emailErr">Please enter a valid email address.</div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject *</label>
+            <select id="subject" name="subject">
+              <option value="">Select a topic…</option>
+              <option>Pest Detection Help</option>
+              <option>Technical Support</option>
+              <option>Partnership / Collaboration</option>
+              <option>Feedback</option>
+              <option>Other</option>
+            </select>
+            <div class="form-error-msg" id="subjectErr">Please select a subject.</div>
+          </div>
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" placeholder="Tell us how we can help you…"></textarea>
+            <div class="form-error-msg" id="messageErr">Please enter your message (min. 20 characters).</div>
+          </div>
+          <button type="submit" class="btn-primary form-submit">
+            Send Message →
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── FOOTER -->
+<footer id="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo" aria-label="FarmGuard">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+          </div>
+          FarmGuard
+        </a>
+        <p>AI-powered pest detection for farmers. Protect your crops, secure your livelihood.</p>
+        <div class="social-links" aria-label="Social media links">
+          <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+          <a href="#" class="social-link" aria-label="Facebook">f</a>
+          <a href="#" class="social-link" aria-label="Instagram">📷</a>
+          <a href="#" class="social-link" aria-label="YouTube">▶</a>
+          <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#">Pricing Plans</a></li>
+          <li><a href="#">Download App</a></li>
+          <li><a href="#">API Access</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Pest Library</a></li>
+          <li><a href="#">Crop Guide</a></li>
+          <li><a href="#">Farmers Blog</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Community Forum</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press & Media</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 FarmGuard. All rights reserved.</span>
+      <span>Made with 🌿 for farmers across India &amp; beyond · <a href="#">Terms</a> · <a href="#">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ────────────────────────────────────── JAVASCRIPT -->
+<script>
+  /* ── Navbar scroll effect ────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ── Mobile menu ─────────────────────────────── */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileNav  = document.getElementById('mobileNav');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  function closeMenu() {
+    mobileNav.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Scroll-reveal ───────────────────────────── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // stagger siblings
+        const siblings = entry.target.closest('.features-grid, .steps-wrap, .testi-grid, .faq-list')
+          ? [...entry.target.closest('.features-grid, .steps-wrap, .testi-grid, .faq-list').querySelectorAll('.reveal')]
+          : null;
+        const delay = siblings ? siblings.indexOf(entry.target) * 80 : 0;
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── FAQ accordion ───────────────────────────── */
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      // close all
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+      // open clicked if was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* ── Form validation ─────────────────────────── */
+  const form = document.getElementById('contactForm');
+
+  function showError(inputId, errId, show) {
+    const input = document.getElementById(inputId);
+    const err   = document.getElementById(errId);
+    input.classList.toggle('error', show);
+    err.classList.toggle('show', show);
+  }
+
+  function validateEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    const fname   = document.getElementById('fname').value.trim();
+    const lname   = document.getElementById('lname').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value.trim();
+
+    showError('fname',   'fnameErr',   !fname);   if (!fname)   valid = false;
+    showError('lname',   'lnameErr',   !lname);   if (!lname)   valid = false;
+    showError('email',   'emailErr',   !validateEmail(email)); if (!validateEmail(email)) valid = false;
+    showError('subject', 'subjectErr', !subject); if (!subject) valid = false;
+    showError('message', 'messageErr', message.length < 20); if (message.length < 20) valid = false;
+
+    if (valid) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    }
+  });
+
+  // Clear error on input
+  ['fname','lname','email','subject','message'].forEach(id => {
+    const el  = document.getElementById(id);
+    const err = document.getElementById(id + 'Err');
+    if (!el || !err) return;
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      err.classList.remove('show');
+    });
+  });
+
+  /* ── Smooth anchor navigation ────────────────── */
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
